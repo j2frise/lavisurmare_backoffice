@@ -1,30 +1,51 @@
 <template>
   <div id="login">
-    <img src="/static/img/logo.png" class="center-block logo">
+    <img src="/static/img/logo.png" class="center-block logo" />
 
     <div class="text-center col-sm-12">
       <!-- login form -->
       <form @submit.prevent="checkCreds">
-        <div class="input-group">
-          <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-          <input class="form-control" name="username" placeholder="Username" type="text" v-model="username">
+        <transition name="fade">
+          <div v-if="!sucess" class="input-group alert alert-danger">{{ error }}</div>
+        </transition>
+        <div class="input-group" :class="controlUserName">
+          <span class="input-group-addon">
+            <i class="fa fa-envelope"></i>
+          </span>
+          <input
+            class="form-control"
+            name="username"
+            placeholder="Identifiant"
+            type="text"
+            v-model.trim="username"
+          />
         </div>
 
-        <div class="input-group">
-          <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-          <input class="form-control" name="password" placeholder="Password" type="password" v-model="password">
+        <div class="input-group" :class="controlPassword">
+          <span class="input-group-addon">
+            <i class="fa fa-lock"></i>
+          </span>
+          <input
+            class="form-control"
+            name="password"
+            placeholder="Mot de passe"
+            type="password"
+            v-model.trim="password"
+          />
         </div>
-        <button type="submit" v-bind:class="'btn btn-primary btn-lg ' + loading">Submit</button>
+        <button type="submit" v-bind:class="'btn btn-primary form-control' + loading">Se connecter</button>
       </form>
 
       <!-- errors -->
-      <div v-if=response class="text-red"><p class="vertical-5p lead">{{response}}</p></div>
+      <div v-if="response" class="text-red">
+        <p class="vertical-5p lead">{{response}}</p>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import api from '../api'
+// import api from '../api'
 
 export default {
   name: 'Login',
@@ -34,25 +55,32 @@ export default {
       loading: '',
       username: '',
       password: '',
-      response: ''
+      response: '',
+      count: 0,
+      controlPassword: true,
+      controlUserName: true,
+      sucess: true,
+      error: '',
+      hasError: 'has-error'
     }
   },
   methods: {
     checkCreds() {
-      const { username, password } = this
-
-      this.toggleLoading()
+      this.control()
+      if (this.count !== 0) {
+        this.error = '* Remplissez tous les champs'
+      } else {
+        this.error = ''
+      }
+      console.log(this.controlUserName, this.controlPassword, this.sucess)
+     /* this.toggleLoading()
       this.resetResponse()
       this.$store.commit('TOGGLE_LOADING')
-
-      /* Making API call to authenticate a user */
       api
         .request('post', '/login', { username, password })
         .then(response => {
           this.toggleLoading()
-
           var data = response.data
-          /* Checking if error object was returned from the server */
           if (data.error) {
             var errorName = data.error.name
             if (errorName) {
@@ -67,7 +95,6 @@ export default {
             return
           }
 
-          /* Setting user in the state and caching record to the localStorage */
           if (data.user) {
             var token = 'Bearer ' + data.token
 
@@ -88,7 +115,30 @@ export default {
 
           this.response = 'Server appears to be offline'
           this.toggleLoading()
-        })
+        }) */
+    },
+    control() {
+      if (this.username && this.password) {
+        this.count = 0
+        this.sucess = true
+        this.controlUserName = ''
+        this.controlPassword = ''
+      } else if (this.username && !this.password) {
+        this.count++
+        this.controlUserName = ''
+        this.controlPassword = this.hasError
+        this.sucess = false
+      } else if (!this.username && this.password) {
+        this.count++
+        this.controlUserName = this.hasError
+        this.controlPassword = ''
+        this.sucess = false
+      } else {
+        this.count++
+        this.controlUserName = this.hasError
+        this.controlPassword = this.hasError
+        this.sucess = false
+      }
     },
     toggleLoading() {
       this.loading = this.loading === '' ? 'loading' : ''
@@ -102,7 +152,7 @@ export default {
 
 <style>
 #login {
-  padding: 10em;
+  padding: 3em;
 }
 
 html,
@@ -145,7 +195,8 @@ body,
 }
 
 @media (max-width: 1241px) {
-  .input-group input {
+  .input-group input,
+  button.form-control {
     height: 4em;
   }
 }
@@ -155,13 +206,29 @@ body,
     padding-right: 20em;
   }
 
-  .input-group input {
-    height: 6em;
+  .input-group input,
+  button.form-control {
+    height: 5em;
   }
 }
 
 .input-group-addon i {
   height: 15px;
   width: 15px;
+}
+
+button.btn {
+  text-transform: uppercase;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s, transform 1s;
+}
+
+.face-enter,
+.fade-leave-active {
+  opacity: 0;
+  transform: translateX(25px);
 }
 </style>
