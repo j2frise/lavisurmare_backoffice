@@ -226,7 +226,7 @@ button.btn {
   transition: opacity 1s, transform 1s;
 }
 
-.face-enter,
+.fade-enter,
 .fade-leave-active {
   opacity: 0;
   transform: translateX(25px);
