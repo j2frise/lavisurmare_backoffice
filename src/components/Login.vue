@@ -6,7 +6,7 @@
       <!-- login form -->
       <form @submit.prevent="checkCreds">
         <transition name="fade">
-          <div v-if="!sucess" class="input-group alert alert-danger">{{ error }}</div>
+          <div v-if="!sucess" class="input-group alert alert-danger">{{ response }}</div>
         </transition>
         <div class="input-group" :class="controlUserName">
           <span class="input-group-addon">
@@ -33,19 +33,14 @@
             v-model.trim="password"
           />
         </div>
-        <button type="submit" v-bind:class="'btn btn-primary form-control' + loading">Se connecter</button>
+        <button type="submit" v-bind:class="'btn btn-primary form-control ' + loading">Se connecter</button>
       </form>
-
-      <!-- errors -->
-      <div v-if="response" class="text-red">
-        <p class="vertical-5p lead">{{response}}</p>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
-// import api from '../api'
+import api from '../api'
 
 export default {
   name: 'Login',
@@ -60,7 +55,6 @@ export default {
       controlPassword: true,
       controlUserName: true,
       sucess: true,
-      error: '',
       hasError: 'has-error'
     }
   },
@@ -68,54 +62,54 @@ export default {
     checkCreds() {
       this.control()
       if (this.count !== 0) {
-        this.error = '* Remplissez tous les champs'
+        this.response = '* Remplissez tous les champs'
       } else {
-        this.error = ''
+        const {username, password} = this
+        this.toggleLoading()
+        this.resetResponse()
+        this.$store.commit('TOGGLE_LOADING')
+        api
+          .request('get', '/login', {username, password})
+          .then(response => {
+            this.toggleLoading()
+            var data = response.data
+            console.log(data)
+            // if (data.error) {
+            //   var errorName = data.error.name
+            //   if (errorName) {
+            //     this.response =
+            //       errorName === 'InvalidCredentialsError'
+            //         ? 'Username/Password incorrect. Please try again.'
+            //         : errorName
+            //   } else {
+            //     this.response = data.error
+            //   }
+
+            //   return
+            // }
+
+            // if (data.user) {
+            //   var token = 'Bearer ' + data.token
+
+            //   this.$store.commit('SET_USER', data.user)
+            //   this.$store.commit('SET_TOKEN', token)
+
+            //   if (window.localStorage) {
+            //     window.localStorage.setItem('user', JSON.stringify(data.user))
+            //     window.localStorage.setItem('token', token)
+            //   }
+
+            //   this.$router.push(data.redirect ? data.redirect : '/')
+            // }
+          })
+          .catch(error => {
+            this.$store.commit('TOGGLE_LOADING')
+            console.log(error)
+
+            this.response = 'Server appears to be offline'
+            this.toggleLoading()
+          })
       }
-      console.log(this.controlUserName, this.controlPassword, this.sucess)
-     /* this.toggleLoading()
-      this.resetResponse()
-      this.$store.commit('TOGGLE_LOADING')
-      api
-        .request('post', '/login', { username, password })
-        .then(response => {
-          this.toggleLoading()
-          var data = response.data
-          if (data.error) {
-            var errorName = data.error.name
-            if (errorName) {
-              this.response =
-                errorName === 'InvalidCredentialsError'
-                  ? 'Username/Password incorrect. Please try again.'
-                  : errorName
-            } else {
-              this.response = data.error
-            }
-
-            return
-          }
-
-          if (data.user) {
-            var token = 'Bearer ' + data.token
-
-            this.$store.commit('SET_USER', data.user)
-            this.$store.commit('SET_TOKEN', token)
-
-            if (window.localStorage) {
-              window.localStorage.setItem('user', JSON.stringify(data.user))
-              window.localStorage.setItem('token', token)
-            }
-
-            this.$router.push(data.redirect ? data.redirect : '/')
-          }
-        })
-        .catch(error => {
-          this.$store.commit('TOGGLE_LOADING')
-          console.log(error)
-
-          this.response = 'Server appears to be offline'
-          this.toggleLoading()
-        }) */
     },
     control() {
       if (this.username && this.password) {
@@ -145,6 +139,7 @@ export default {
     },
     resetResponse() {
       this.response = ''
+      this.sucess = true
     }
   }
 }
