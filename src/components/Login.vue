@@ -69,10 +69,9 @@ export default {
         this.resetResponse()
         this.$store.commit('TOGGLE_LOADING')
         api
-          .request('get', '/login', {username, password})
-          .then(response => {
+          .request('post', '/login/index.php', {username, password})
+          .then(data => {
             this.toggleLoading()
-            var data = response.data
             console.log(data)
             // if (data.error) {
             //   var errorName = data.error.name

@@ -1,4 +1,4 @@
-import axios from 'axios'
+// import axios from 'axios'
 import config from '../config'
 
 export default {
@@ -14,6 +14,21 @@ export default {
     }
 
     var url = config.serverURI + uri
-    return axios({ method, url, data })
+    if (method === 'post') {
+      return fetch(url,
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            data
+          })
+        })
+        .then(response => response.json())
+    }
+
+    if (method === 'get') {
+      var setUrl = data == null ? fetch(url) : fetch(`${url}?${data}`)
+      return setUrl
+      .then(response => response.json())
+    }
   }
 }
