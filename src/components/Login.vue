@@ -70,42 +70,32 @@ export default {
         this.$store.commit('TOGGLE_LOADING')
         api
           .request('post', '/login/index.php', {username, password})
-          .then(data => {
+          .then(response => {
             this.toggleLoading()
-            console.log(data)
-            // if (data.error) {
-            //   var errorName = data.error.name
-            //   if (errorName) {
-            //     this.response =
-            //       errorName === 'InvalidCredentialsError'
-            //         ? 'Username/Password incorrect. Please try again.'
-            //         : errorName
-            //   } else {
-            //     this.response = data.error
-            //   }
-
-            //   return
-            // }
-
-            // if (data.user) {
-            //   var token = 'Bearer ' + data.token
-
-            //   this.$store.commit('SET_USER', data.user)
-            //   this.$store.commit('SET_TOKEN', token)
-
-            //   if (window.localStorage) {
-            //     window.localStorage.setItem('user', JSON.stringify(data.user))
-            //     window.localStorage.setItem('token', token)
-            //   }
-
-            //   this.$router.push(data.redirect ? data.redirect : '/')
-            // }
+            var data = response.data
+            if (!data.error) {
+              var dataReturn = data.return
+              if (dataReturn === 'notFound') {
+                this.sucess = false
+                this.response = 'Identifiants ou mot de passe incorrect'
+              } else {
+                this.$store.commit('SET_USER', dataReturn)
+                this.sucess = true
+                if (window.localStorage) {
+                  window.localStorage.setItem('user', dataReturn)
+                }
+                this.$router.push(data.redirect ? data.redirect : '/admin')
+              }
+            } else {
+              this.response = data.error
+              return
+            }
           })
           .catch(error => {
             this.$store.commit('TOGGLE_LOADING')
             console.log(error)
 
-            this.response = 'Server appears to be offline'
+            this.response = 'Serveur inactif'
             this.toggleLoading()
           })
       }
