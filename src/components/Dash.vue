@@ -18,7 +18,7 @@
         <ol class="breadcrumb">
           <li>
             <a href="javascript:;">
-              <i class="fa fa-home"></i>Home</a>
+              <i class="fa fa-home"></i>Tableau de bord</a>
           </li>
           <li class="active">{{$route.name.toUpperCase()}}</li>
         </ol>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import faker from 'faker'
+// import faker from 'faker'
 import config from '../config'
 import DashFooter from './layout/DashFooter'
 import DashHeader from './layout/DashHeader'
@@ -60,11 +60,23 @@ export default {
   computed: {
     user () {
       return {
-        displayName: faker.name.findName(),
-        avatar: faker.image.avatar(),
-        roles: [faker.name.jobTitle(), faker.name.jobTitle()]
+        displayName: this.$store.state.user,
+        email: this.$store.state.email,
+        roles: 'Administrateur principal'
       }
     }
+  },
+  methods: {
+    connected: function() {
+      if (this.$store.state.user === null || this.$store.state.user === undefined) {
+        this.$router.push('/')
+      } else {
+        return true
+      }
+    }
+  },
+  beforeMount() {
+    this.connected()
   }
 }
 </script>

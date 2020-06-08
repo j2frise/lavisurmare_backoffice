@@ -1,13 +1,16 @@
+import config from '../config'
+
 export default {
   callingAPI: false,
   searching: '',
-  serverURI: 'http://10.110.1.136:8080',
+  serverURI: config.serverURI,
   user: null,
+  email: null,
   token: null,
   userInfo: {
     messages: [
       {
-        id: 1,
+        id: this.token,
         title: 'Support Team',
         body: 'Why not consider this a test message?',
         createdAt: '17 min ago'

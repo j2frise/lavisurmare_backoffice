@@ -79,12 +79,19 @@ export default {
                 this.sucess = false
                 this.response = 'Identifiants ou mot de passe incorrect'
               } else {
-                this.$store.commit('SET_USER', dataReturn)
+                var token = 'Porteur ' + dataReturn.adm_id
+
+                this.$store.commit('SET_USER', dataReturn.adm_sPseudo)
+                this.$store.commit('SET_EMAIL', dataReturn.adm_sEmail)
+                this.$store.commit('SET_TOKEN', token)
                 this.sucess = true
+
                 if (window.localStorage) {
-                  window.localStorage.setItem('user', dataReturn)
+                  window.localStorage.setItem('user', JSON.stringify(dataReturn.adm_sPseudo))
+                  window.localStorage.setItem('email', JSON.stringify(dataReturn.adm_sEmail))
+                  window.localStorage.setItem('token', token)
                 }
-                this.$router.push(data.redirect ? data.redirect : '/admin')
+                this.$router.push('/admin')
               }
             } else {
               this.response = data.error
@@ -129,7 +136,15 @@ export default {
     resetResponse() {
       this.response = ''
       this.sucess = true
+    },
+    connected() {
+      if (this.$store.state.user !== null) {
+        this.$router.push('/admin')
+      }
     }
+  },
+  beforeMount() {
+    this.connected()
   }
 }
 </script>

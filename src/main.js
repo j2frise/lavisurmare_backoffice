@@ -41,7 +41,7 @@ router.beforeEach((to, from, next) => {
   ) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
-    window.console.log('Not authenticated')
+    window.console.log('Non authentifié')
     next({
       path: '/login',
       query: { redirect: to.fullPath }
@@ -56,10 +56,13 @@ sync(store, router)
 // Check local storage to handle refreshes
 if (window.localStorage) {
   var localUserString = window.localStorage.getItem('user') || 'null'
+  var localEmailString = window.localStorage.getItem('email') || 'null'
   var localUser = JSON.parse(localUserString)
+  var localEmail = JSON.parse(localEmailString)
 
-  if (localUser && store.state.user !== localUser) {
+  if (localUser && store.state.user !== localUser && store.state.user !== localEmail) {
     store.commit('SET_USER', localUser)
+    store.commit('SET_EMAIL', localEmail)
     store.commit('SET_TOKEN', window.localStorage.getItem('token'))
   }
 }
