@@ -18,13 +18,13 @@
         <ol class="breadcrumb">
           <li>
             <a href="javascript:;">
-              <i class="fa fa-home"></i>Tableau de bord</a>
+              <i class="fa fa-home"></i>Accueil</a>
           </li>
           <li class="active">{{$route.name.toUpperCase()}}</li>
         </ol>
       </section>
 
-      <router-view></router-view>
+      <router-view :user="user"></router-view>
     </div>
     <!-- /.content-wrapper -->
   
@@ -62,6 +62,7 @@ export default {
       return {
         displayName: this.$store.state.user,
         email: this.$store.state.email,
+        id: this.$store.state.token,
         roles: 'Administrateur principal'
       }
     }

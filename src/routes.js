@@ -22,7 +22,7 @@ const routes = [
     component: LoginView
   },
   {
-    path: '/admin',
+    path: '/in',
     component: DashView,
     children: [
       {
@@ -44,8 +44,8 @@ const routes = [
       }, {
         path: 'setting',
         component: SettingView,
-        name: 'Settings',
-        meta: {description: 'User settings page'}
+        name: 'Réglages',
+        meta: {description: 'Page pour modifier les informations de profil'}
       }, {
         path: 'access',
         component: AccessView,

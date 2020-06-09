@@ -1,10 +1,10 @@
 <template>
   <div id="login">
-    <img src="/static/img/logo.png" class="center-block logo" />
+    <img src="/static/img/logo_mars_blanc.svg" class="center-block logo" />
 
     <div class="text-center col-sm-12">
       <!-- login form -->
-      <form @submit.prevent="checkCreds">
+      <form @submit.prevent="checkCreds" class="center">
         <transition name="fade">
           <div v-if="!sucess" class="input-group alert alert-danger">{{ response }}</div>
         </transition>
@@ -79,7 +79,7 @@ export default {
                 this.sucess = false
                 this.response = 'Identifiants ou mot de passe incorrect'
               } else {
-                var token = 'Porteur ' + dataReturn.adm_id
+                var token = dataReturn.adm_id
 
                 this.$store.commit('SET_USER', dataReturn.adm_sPseudo)
                 this.$store.commit('SET_EMAIL', dataReturn.adm_sEmail)
@@ -91,7 +91,7 @@ export default {
                   window.localStorage.setItem('email', JSON.stringify(dataReturn.adm_sEmail))
                   window.localStorage.setItem('token', token)
                 }
-                this.$router.push('/admin')
+                this.$router.push('/in')
               }
             } else {
               this.response = data.error
@@ -139,7 +139,7 @@ export default {
     },
     connected() {
       if (this.$store.state.user !== null) {
-        this.$router.push('/admin')
+        this.$router.push('/in')
       }
     }
   },
@@ -200,7 +200,7 @@ body,
   }
 }
 @media (min-width: 1242px) {
-  form {
+  form.center {
     padding-left: 20em;
     padding-right: 20em;
   }
