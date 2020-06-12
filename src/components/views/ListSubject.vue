@@ -38,11 +38,15 @@
                     </thead>
                     <tbody>
                       <tr v-for="(element, index) in myData" :key="index" class="even" role="row">
-                        <td class="sorting_1">Titre</td>
-                        <td>Miniature</td>
-                        <td>GNU/Linux</td>
-                        <td>54</td>
-                        <td>A</td>
+                        <td class="sorting_1">{{ element.sub_sTitre }}</td>
+                        <td><img class="mini" :src="element.sub_sImage" alt=""></td>
+                        <td>{{ getArticles(element.sub_id) }} {{ nbArticle }}</td>
+                        <td><span class="label" v-bind:class="parseInt(element.sub_iSta) !== 0 ? 'label-success':'label-danger'">{{ parseInt(element.sub_iSta) !== 0 ? 'actif':'désactivé' }}</span></td>
+                        <td>
+                            <a href="#" @click="deleteRow(element.sub_id)" class="btn btn-danger">
+                              <i class="fa fa-trash"></i>
+                            </a>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -66,8 +70,10 @@ export default {
   data(router) {
     return {
       list: 'subject',
+      list2: 'article',
       dt: '',
-      myData: []
+      myData: [],
+      nbArticle: 0
     }
   },
   methods: {
@@ -87,11 +93,45 @@ export default {
           console.log(error)
           console.log('Serveur inactif')
         })
+    },
+    getArticles(sub) {
+      api
+        .request('get', '/list/index.php?q=' + this.list2 + '&j=' + sub)
+        .then(response => {
+          var data = response.data
+          if (!data.error) {
+            this.nbArticle = (data.return).length
+          } else {
+            console.log(data.error)
+            return
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          console.log('Serveur inactif')
+        })
+    },
+    deleteRow(id) {
+      api
+        .request('get', '/delete/index.php?subject=' + id)
+        .then(response => {
+          var data = response.data
+          if (!data.error) {
+            this.getSubjects()
+          } else {
+            console.log(data.error)
+            return
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          console.log('Serveur inactif')
+        })
     }
   },
   mounted() {
-    this.dt = $('#example1').DataTable()
     this.getSubjects()
+    this.dt = $('#example1').DataTable()
   },
   watch: {
     myData(val) {
@@ -105,5 +145,8 @@ export default {
 </script>
 
 <style>
-
+  .mini{
+    width: 70px;
+    height: 40px;
+  }
 </style>
