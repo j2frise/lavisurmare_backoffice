@@ -25,6 +25,15 @@ export default {
         .then(response => response.json())
     }
 
+    if (method === 'post_file') {
+      return fetch(url,
+        {
+          method: 'POST',
+          body: data
+        })
+        .then(response => response.json())
+    }
+
     if (method === 'get') {
       var setUrl = data == null ? fetch(url) : fetch(`${url}?${data}`)
       return setUrl

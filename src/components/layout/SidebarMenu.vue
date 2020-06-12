@@ -15,7 +15,7 @@
       </a>
     </router-link>
     <li class="header">Administrer</li>
-    <router-link tag="li" class="pageLink" to="/tasks">
+    <router-link tag="li" class="pageLink" to="/in/subject">
       <a>
         <i class="fa fa-folder-o"></i>
         <span class="page">Gestion de contenu</span>

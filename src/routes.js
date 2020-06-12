@@ -4,9 +4,11 @@ import NotFoundView from './components/404.vue'
 
 // Import Views - Dash
 import DashboardView from './components/views/Dashboard.vue'
-import TablesView from './components/views/Tables.vue'
-import TasksView from './components/views/Tasks.vue'
 import SettingView from './components/views/Setting.vue'
+import ContentView from './components/views/Content.vue'
+import ListSubjectView from './components/views/ListSubject.vue'
+import AddSubjectView from './components/views/AddSubject.vue'
+import TasksView from './components/views/Tasks.vue'
 import AccessView from './components/views/Access.vue'
 import ServerView from './components/views/Server.vue'
 import ReposView from './components/views/Repos.vue'
@@ -32,10 +34,22 @@ const routes = [
         name: 'Dashboard',
         meta: {description: 'Résumé des contenus et activités'}
       }, {
-        path: 'tables',
-        component: TablesView,
-        name: 'Tables',
-        meta: {description: 'Simple and advance table in CoPilot'}
+        path: 'subject',
+        component: ContentView,
+        children: [
+          {
+            path: 'list',
+            alias: '',
+            component: ListSubjectView,
+            name: 'Contenus',
+            meta: {description: 'Gestion des chapitres'}
+          }, {
+            path: 'add',
+            component: AddSubjectView,
+            name: 'Nouveau chapitre',
+            meta: {description: 'Ajout de chapitre'}
+          }
+        ]
       }, {
         path: 'tasks',
         component: TasksView,
