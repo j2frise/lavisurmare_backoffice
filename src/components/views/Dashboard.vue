@@ -20,14 +20,14 @@
         <info-box color-class="bg-aqua"
                   :icon-classes="['ion', 'ion-ios-gear-outline']"
                   text="Chapitres"
-                  number="90%"></info-box>
+                  :number="chapitre"></info-box>
       </div>
       <!-- /.col -->
       <div class="col-md-3 col-sm-6 col-xs-12">
         <info-box color-class="bg-red"
                   :icon-classes="['fa', 'fa-google-plus']"
                   text="articles"
-                  number="41,410"></info-box>
+                  :number="article"></info-box>
       </div>
       <!-- /.col -->
       <div class="col-md-6 col-sm-12 col-xs-12">
@@ -64,10 +64,10 @@
 </template>
 
 <script>
-import Chart from 'chart.js'
 import Alert from '../widgets/Alert'
 import InfoBox from '../widgets/InfoBox'
 import ProcessInfoBox from '../widgets/ProcessInfoBox'
+import api from '../../api'
 
 export default {
   name: 'Dashboard',
@@ -78,89 +78,51 @@ export default {
   },
   data () {
     return {
-      generateRandomNumbers (numbers, max, min) {
-        var a = []
-        for (var i = 0; i < numbers; i++) {
-          a.push(Math.floor(Math.random() * (max - min + 1)) + max)
-        }
-        return a
-      }
+      list: 'subject',
+      list2: 'article',
+      article: 0,
+      chapitre: 0
     }
   },
-  computed: {
-    coPilotNumbers () {
-      return this.generateRandomNumbers(12, 1000000, 10000)
+  methods: {
+    getSubjects() {
+      api
+        .request('get', '/list/index.php?q=' + this.list)
+        .then(response => {
+          var data = response.data
+          if (!data.error) {
+            this.chapitre = data.return.length
+          } else {
+            console.log(data.error)
+            return
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          console.log('Serveur inactif')
+        })
     },
-    personalNumbers () {
-      return this.generateRandomNumbers(12, 1000000, 10000)
-    },
-    isMobile () {
-      return (window.innerWidth <= 800 && window.innerHeight <= 600)
+    getArticles() {
+      api
+        .request('get', '/list/index.php?q=' + this.list2)
+        .then(response => {
+          var data = response.data
+          if (!data.error) {
+            this.article = data.return.length
+          } else {
+            console.log(data.error)
+            return
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          console.log('Serveur inactif')
+        })
     }
   },
   mounted () {
-    this.$nextTick(() => {
-      var ctx = document.getElementById('trafficBar').getContext('2d')
-      var config = {
-        type: 'line',
-        data: {
-          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-          datasets: [{
-            label: 'CoPilot',
-            fill: false,
-            borderColor: '#284184',
-            pointBackgroundColor: '#284184',
-            backgroundColor: 'rgba(0, 0, 0, 0)',
-            data: this.coPilotNumbers
-          }, {
-            label: 'Personal Site',
-            borderColor: '#4BC0C0',
-            pointBackgroundColor: '#4BC0C0',
-            backgroundColor: 'rgba(0, 0, 0, 0)',
-            data: this.personalNumbers
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: !this.isMobile,
-          legend: {
-            position: 'bottom',
-            display: true
-          },
-          tooltips: {
-            mode: 'label',
-            xPadding: 10,
-            yPadding: 10,
-            bodySpacing: 10
-          }
-        }
-      }
-
-      new Chart(ctx, config) // eslint-disable-line no-new
-
-      var pieChartCanvas = document.getElementById('languagePie').getContext('2d')
-      var pieConfig = {
-        type: 'pie',
-        data: {
-          labels: ['HTML', 'JavaScript', 'CSS'],
-          datasets: [{
-            data: [56.6, 37.7, 4.1],
-            backgroundColor: ['#00a65a', '#f39c12', '#00c0ef'],
-            hoverBackgroundColor: ['#00a65a', '#f39c12', '#00c0ef']
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: !this.isMobile,
-          legend: {
-            position: 'bottom',
-            display: true
-          }
-        }
-      }
-
-      new Chart(pieChartCanvas, pieConfig) // eslint-disable-line no-new
-    })
+    this.getArticles()
+    this.getSubjects()
   }
 }
 </script>

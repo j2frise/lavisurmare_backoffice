@@ -30,19 +30,19 @@
         </span>
       </a>
       <ul class="treeview-menu">
+        <router-link tag="li" class="pageLink" to="/in/features">
+          <a>
+            <span class="page">Caractéristiques de Mars</span>
+          </a>
+        </router-link>
         <li>
           <a href="#">
-            <i class="fa fa-file-word-o"></i> Item 1
+            Utilisateur en attente
           </a>
         </li>
         <li>
           <a href="#">
-            <i class="fa fa-file-picture-o"></i> Item 2
-          </a>
-        </li>
-        <li>
-          <a href="#">
-            <i class="fa fa-file-pdf-o"></i> Item 3
+            Utilisateur actif
           </a>
         </li>
       </ul>

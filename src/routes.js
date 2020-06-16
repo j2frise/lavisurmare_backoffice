@@ -8,10 +8,12 @@ import SettingView from './components/views/Setting.vue'
 import ContentView from './components/views/Content.vue'
 import ListSubjectView from './components/views/ListSubject.vue'
 import AddSubjectView from './components/views/AddSubject.vue'
-import TasksView from './components/views/Tasks.vue'
-import AccessView from './components/views/Access.vue'
-import ServerView from './components/views/Server.vue'
-import ReposView from './components/views/Repos.vue'
+import EditSubjectView from './components/views/EditSubject.vue'
+import ListArticlesView from './components/views/ListArticles.vue'
+import ArticlesView from './components/views/Articles.vue'
+import AddArticleView from './components/views/AddArticle.vue'
+import EditArticleView from './components/views/EditArticle.vue'
+import FeaturesView from './components/views/Features.vue'
 
 // Routes
 const routes = [
@@ -22,8 +24,7 @@ const routes = [
   {
     path: '/login',
     component: LoginView
-  },
-  {
+  }, {
     path: '/in',
     component: DashView,
     children: [
@@ -33,6 +34,12 @@ const routes = [
         component: DashboardView,
         name: 'Dashboard',
         meta: {description: 'Résumé des contenus et activités'}
+      }, {
+        path: 'features',
+        alias: '',
+        component: FeaturesView,
+        name: 'Caractéristiques',
+        meta: {description: 'Les caractéristiques de la planète Mars'}
       }, {
         path: 'subject',
         component: ContentView,
@@ -48,33 +55,44 @@ const routes = [
             component: AddSubjectView,
             name: 'Nouveau chapitre',
             meta: {description: 'Ajout de chapitre'}
+          }, {
+            path: 'edit/:id',
+            component: EditSubjectView,
+            props: true,
+            name: 'Modifier chapitre',
+            meta: {description: 'Editer un chapitre'}
           }
         ]
       }, {
-        path: 'tasks',
-        component: TasksView,
-        name: 'Tasks',
-        meta: {description: 'Tasks page in the form of a timeline'}
+        path: 'article/:id',
+        component: ArticlesView,
+        props: true,
+        children: [
+          {
+            path: 'list',
+            alias: '',
+            component: ListArticlesView,
+            name: 'Articles',
+            meta: {description: 'Gestion des articles'}
+          }, {
+            path: 'add/:id',
+            component: AddArticleView,
+            name: 'Nouvel article',
+            props: true,
+            meta: {description: 'Ajout d\'article'}
+          }, {
+            path: 'edit/:id',
+            component: EditArticleView,
+            props: true,
+            name: 'Modifier article',
+            meta: {description: 'Editer un artcile'}
+          }
+        ]
       }, {
         path: 'setting',
         component: SettingView,
         name: 'Réglages',
         meta: {description: 'Page pour modifier les informations de profil'}
-      }, {
-        path: 'access',
-        component: AccessView,
-        name: 'Access',
-        meta: {description: 'Example of using maps'}
-      }, {
-        path: 'server',
-        component: ServerView,
-        name: 'Servers',
-        meta: {description: 'List of our servers', requiresAuth: true}
-      }, {
-        path: 'repos',
-        component: ReposView,
-        name: 'Repository',
-        meta: {description: 'List of popular javascript repos'}
       }
     ]
   }, {

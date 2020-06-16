@@ -20,24 +20,28 @@
                   </transition>
                 </div>
                 <div class="col-xs-12 col-md-6">
-                  <h4>Ajouter un chapiter</h4>
-                  <form @submit.prevent="addSubject" method="POST" enctype="multipart/form-data">
+                  <h4></h4>
+                  <form @submit.prevent="editSubject" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                       <label class="control-label">Titre</label>
-                      <input class="form-control require" name="title" placeholder="" type="text">
+                      <input class="form-control require" name="title" placeholder="" type="text" :value="myData.sub_sTitre">
                     </div>
                     <div class="form-group">
                       <label class="control-label">Miniature</label>
-                      <input class="form-control require" name="image" placeholder="" type="file">
+                      <input class="form-control" name="image" placeholder="" type="file">
+                      <input type="hidden" name="id" :value="myData.sub_id">
                     </div>
                     <div class="form-group">
                       <label class="control-label">Description</label>
-                      <textarea rows="4" class="form-control require" placeholder="" name="desc"></textarea>
+                      <textarea rows="6" class="form-control require" placeholder="" name="desc" :value="myData.sub_sDescriptif"></textarea>
                     </div>
                     <div class="form-group">
                       <button type="submit" v-bind:class="'btn btn-primary btn-sm form-control'">ENREGISTRER</button>
                     </div>
                   </form>
+                </div>
+                <div class="col-xs-12 col-md-6 content-img">
+                    <img :src="img" alt="myData.sub_sTitre">
                 </div>
 
             </div>
@@ -54,9 +58,12 @@ import api from '../../api'
 import Alert from '../widgets/Alert'
 
 export default {
-  name: 'AddSubject',
+  name: 'EditSubject',
   components: {
     Alert
+  },
+  props: {
+    id: String
   },
   data(router) {
     return {
@@ -67,11 +74,30 @@ export default {
       classAdd: '',
       icon: '',
       myData: {},
-      success: true
+      success: true,
+      img: ''
     }
   },
   methods: {
-    addSubject() {
+    getSubjects() {
+      api
+        .request('get', '/get/index.php?subject&id=' + this.id)
+        .then(response => {
+          var data = response.data
+          if (!data.error) {
+            this.myData = data.return
+            this.img = this.myData.sub_sImage
+          } else {
+            console.log(data.error)
+            return
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          console.log('Serveur inactif')
+        })
+    },
+    editSubject() {
       this.resetResponse(event)
       var target = event.target
       this.control(target)
@@ -83,32 +109,36 @@ export default {
       } else {
         this.resetResponse()
         var formData = new FormData()
-        formData.append('image', target.querySelector('.require[type=file]').files[0])
+        formData.append('image', target.querySelector('input[type=file]').files[0])
         formData.append('title', target.querySelector('.require[name=title]').value)
         formData.append('desc', target.querySelector('.require[name=desc]').value)
+        formData.append('id', target.querySelector('input[name=id]').value)
         api
-          .request('post_file', '/addSubject/index.php', formData)
+          .request('post_file', '/editSubject/index.php', formData)
           .then(response => {
             var data = response.data
             this.success = false
             if (!data.error) {
-              if (data.return === 'success') {
-                this.successMessage('Le chapitre a été enregistré avec succès')
-                target.querySelector('.require[type=file]').parentNode.classList.remove('has-error')
+              if (data.return === 'Les formats de l\'image autorisés sont .svg, .jpg, .jpeg, .png') {
+                this.errorMessage(data.return)
+                target.querySelector('input[type=file]').parentNode.classList.add('has-error')
                 target.querySelector('.require[name=title]').parentNode.classList.remove('has-error')
-                target.reset()
               } else if (data.return === 'exist') {
                 this.errorMessage('Un chapitre existe déjà avec le même titre')
-                target.querySelector('.require[type=file]').parentNode.classList.remove('has-error')
+                target.querySelector('input[type=file]').parentNode.classList.remove('has-error')
                 target.querySelector('.require[name=title]').parentNode.classList.add('has-error')
               } else if (data.return === 'size_1M') {
                 this.errorMessage('La taille de l\'image ne doit pas dépasser 1M')
-                target.querySelector('.require[type=file]').parentNode.classList.add('has-error')
+                target.querySelector('input[type=file]').parentNode.classList.add('has-error')
                 target.querySelector('.require[name=title]').parentNode.classList.remove('has-error')
               } else {
-                this.errorMessage('Les formats de l\'image autorisés sont .svg, .jpg, .jpeg, .png')
-                target.querySelector('.require[type=file]').parentNode.classList.add('has-error')
+                this.successMessage('Le chapitre a été modifié avec succès')
+                target.querySelector('input[type=file]').parentNode.classList.remove('has-error')
                 target.querySelector('.require[name=title]').parentNode.classList.remove('has-error')
+                target.querySelector('input[type=file]').value = ''
+                if (data.return !== 'success') {
+                  this.img = data.return
+                }
               }
             } else {
               this.errorMessage(data.error)
@@ -149,11 +179,22 @@ export default {
       this.classAdd = this.alertSuccess
       this.icon = 'check'
     }
+  },
+  mounted() {
+    this.getSubjects()
   }
 }
 </script>
 
 <style>
+.content-img {
+    text-align: center;
+}
+
+.content-img img {
+    width: 80%;
+}
+
 .form-group.id {
   opacity: 0;
 }
