@@ -14,12 +14,15 @@ Laviesurmars c'est une WebDoc qui retrace l'histoire de Mars, la planète rouge 
 
 Vous pouvez le visiter en cliquant [**ICI**](https://laviesurmars.netlify.app/) ou directement grace au lien : https://laviesurmars.netlify.app/  
 
-Le backoffice permet de gérer le contenu de l'interface (gestion des contenus d'articles, chapitres, gérer l'identification admin)
+Le backoffice permet de gérer le contenu de l'interface (gestion des contenus d'articles, chapitres, gérer l'identification admin).
 
-Ce WebDoc est un projet de fin d'année à [**HETIC**](https://www.hetic.net/)  
+Ce WebDoc est un projet de fin d'année à [**HETIC**](https://www.hetic.net/).
+
+### Choix Techniques
+Nous avons opté pour du vuejs plutôt que du php, pour un hébergement plus simple et car c'était un challenge pour un back office d'être fait en vuejs.
 
 ### API
-L'API a des chemins pour ajouter/modifier des articles voir en supprimer 
+L'API a des chemins pour ajouter/modifier des articles voir en supprimer. 
 > https://e-cine.xyz/laviesurmars_backend/API
 
 ## Rendu
