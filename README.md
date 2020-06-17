@@ -20,7 +20,7 @@ Ce WebDoc est un projet de fin d'année à [**HETIC**](https://www.hetic.net/)
 
 ### API
 L'API a des chemins pour ajouter/modifier des articles voir en supprimer 
-> *https://e-cine.xyz/laviesurmars_backend/API
+> https://e-cine.xyz/laviesurmars_backend/API
 
 ## Rendu
 #### [Figma](https://www.figma.com/file/tZ9v59Q5fr4JByM35IaqYu/Groupe-7-%F0%9F%8C%8C-Nouveau?node-id=111%3A3000)
