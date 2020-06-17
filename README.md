@@ -14,7 +14,13 @@ Laviesurmars c'est une WebDoc qui retrace l'histoire de Mars, la planète rouge 
 
 Vous pouvez le visiter en cliquant [**ICI**](https://laviesurmars.netlify.app/) ou directement grace au lien : https://laviesurmars.netlify.app/  
 
+Le backoffice permet de gérer le contenu de l'interface (gestion des contenus d'articles, chapitres, gérer l'identification admin)
+
 Ce WebDoc est un projet de fin d'année à [**HETIC**](https://www.hetic.net/)  
+
+### API
+L'API a des chemins pour ajouter/modifier des articles voir en supprimer 
+> *https://e-cine.xyz/laviesurmars_backend/API
 
 ## Rendu
 #### [Figma](https://www.figma.com/file/tZ9v59Q5fr4JByM35IaqYu/Groupe-7-%F0%9F%8C%8C-Nouveau?node-id=111%3A3000)
