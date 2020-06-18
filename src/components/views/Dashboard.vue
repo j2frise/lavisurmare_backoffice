@@ -16,46 +16,21 @@
       </div>
 
       <!-- Info boxes -->
-      <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="col-md-6 col-sm-6 col-xs-12">
         <info-box color-class="bg-aqua"
                   :icon-classes="['ion', 'ion-ios-gear-outline']"
                   text="Chapitres"
                   :number="chapitre"></info-box>
       </div>
       <!-- /.col -->
-      <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="col-md-6 col-sm-6 col-xs-12">
         <info-box color-class="bg-red"
                   :icon-classes="['fa', 'fa-google-plus']"
                   text="articles"
                   :number="article"></info-box>
       </div>
       <!-- /.col -->
-      <div class="col-md-6 col-sm-12 col-xs-12">
-        <process-info-box color-class="bg-green"
-                          :icon-classes="['ion', 'ion-ios-heart-outline']"
-                          text="Visites"
-                          number="92,050"
-                          :progress="20"
-                          description="Soit 35 visites pour aujourd'hui"></process-info-box>
-      </div>
-
-      <!-- fix for small devices only -->
-      <div class="clearfix visible-sm-block"></div>
       
-      <div class="col-md-6 col-sm-6 col-xs-12">
-        <info-box color-class="bg-green"
-                  :icon-classes="['ion', 'ion-ios-people-outline']"
-                  text="utilisateurs actifs"
-                  number="760"></info-box>
-      </div>
-      <!-- /.col -->
-      <div class="col-md-6 col-sm-6 col-xs-12">
-        <info-box color-class="bg-yellow"
-                  :icon-classes="['fa', 'fa-refresh']"
-                  text="demandes d'accès"
-                  number="2,000"></info-box>
-      </div>
-      <!-- /.col -->
     </div>
     <!-- /.row -->
 

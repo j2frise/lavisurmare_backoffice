@@ -58,8 +58,8 @@
                   </form>
                 </div>
                 <div class="col-xs-12 col-md-6 content-img">
-                    <video :src="myData.fea_sideo" controls v-if='myData.fea_sideo != null'></video>
-                    <p else >Il n'y a pas de vidéo</p>
+                    <video style="width: 100%" controls :src="myData.fea_sVideo" v-if='myData.fea_sVideo !== null'></video>
+                    <p v-if='myData.fea_sVideo === null'>Il n'y a pas de vidéo</p>
                 </div>
 
             </div>
@@ -134,6 +134,10 @@ export default {
             if (!data.error) {
               this.myData = data.return
               target.querySelector('input[type=file').value = ''
+              this.classAdd = this.alertSuccess
+              this.success = false
+              this.icon = 'check'
+              this.response = 'Information modifiée avec succès'
             } else {
               this.errorMessage(data.error)
               return
@@ -192,6 +196,7 @@ export default {
 .form-group.id {
   opacity: 0;
 }
+
 
 .fade-enter-active,
 .fade-leave-active {
